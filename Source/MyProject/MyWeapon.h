@@ -3,12 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MyWeaponComponent.h"
-#include "MyWeaponData.h"
-#include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "MyWeapon.generated.h"
-
 
 UCLASS()
 class MYPROJECT_API AMyWeapon : public AActor
@@ -19,23 +15,12 @@ public:
 	// Sets default values for this actor's properties
 	AMyWeapon();
 
-	UPROPERTY(EditAnywhere)
-	USkeletalMeshComponent* Mesh;
-	UPROPERTY(VisibleAnywhere)
-	USphereComponent* SphereColl;
-
-	UMyWeaponComponent* WeaponComponent;
-	USceneComponent* Root;
-	
-
-	UPROPERTY(EditAnywhere)
-	UMyWeaponData* WeaponData;
-	UFUNCTION()
-	void OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	
-	
-private:
+protected:
+	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void Fire();
-	void Reload();
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 };

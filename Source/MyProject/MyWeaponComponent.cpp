@@ -7,8 +7,8 @@
 UMyWeaponComponent::UMyWeaponComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	
-	
+	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh1P"));
+	Mesh3P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh3P"));
 }
 
 
