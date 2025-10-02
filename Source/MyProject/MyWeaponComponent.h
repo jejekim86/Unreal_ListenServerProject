@@ -16,8 +16,4 @@ public:
 	// Sets default values for this component's properties
 	UMyWeaponComponent();
 
-	UPROPERTY(EditAnywhere)
-	USkeletalMeshComponent* Mesh1P;
-	UPROPERTY(EditAnywhere)
-	USkeletalMeshComponent* Mesh3P;
 };

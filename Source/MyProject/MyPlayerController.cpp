@@ -4,6 +4,7 @@
 #include "MyPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "MyCharacter.h"
 #include "GameFramework/Character.h"
 
 AMyPlayerController::AMyPlayerController()
@@ -47,6 +48,9 @@ void AMyPlayerController::Look(const FInputActionValue& value)
 
 void AMyPlayerController::Attack(const FInputActionValue& value)
 {
+	const bool bPressed  = value.Get<bool>();
+	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(GetCharacter()))
+		MyCharacter->Fire();
 	
 }
 

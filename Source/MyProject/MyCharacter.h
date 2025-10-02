@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
+#include "MyWeapon.h"
 #include "MyCharacter.generated.h"
 
 UCLASS()
@@ -22,11 +23,24 @@ public:
 	UPROPERTY(EDITANYWHERE, BlueprintReadWrite, Category = "Camera")
 	UCameraComponent* Camera;
 	UPROPERTY(BlueprintReadOnly)
-	float speed;
+	float Speed;
 	UPROPERTY(BlueprintReadOnly)
-	float direction;
-	
-	
+	float Direction;
+	UPROPERTY(BlueprintReadOnly)
+	bool bWeaponEquipped;
+	UPROPERTY(EDITANYWHERE)
+	USceneComponent* WeaponSocket1P;
+	UPROPERTY(EDITANYWHERE)
+	USceneComponent* WeaponSocket3P;
+
+	AMyWeapon* EquipWeapon;
+
+	FORCEINLINE void SetEquipWeapon(AMyWeapon* NewWeapon) { EquipWeapon = NewWeapon; }
+	FORCEINLINE USceneComponent* GetSocket1P() { return WeaponSocket1P; }
+	FORCEINLINE USceneComponent* GetSocket3P() { return WeaponSocket3P; }
+
+	UFUNCTION(Server, Reliable)
+	void Fire();
 	
 protected:
 	// Called when the game starts or when spawned
