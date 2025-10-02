@@ -34,5 +34,6 @@ protected:
 	void Move(const FInputActionValue& value);
 	void Look(const FInputActionValue& value);
 	void Attack(const FInputActionValue& value);
+	void StopAttack(const FInputActionValue& value);
 	void Jump();
 };

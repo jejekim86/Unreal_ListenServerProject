@@ -54,17 +54,19 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Damage;
 	UPROPERTY(EditAnywhere)
-	float ShootSpeed;
+	float FireRate;
 	UPROPERTY(EditAnywhere)
 	float ReloadTime;
 	UPROPERTY(EditAnywhere)
 	float Spread; // 흔들림
 	UPROPERTY(EditAnywhere)
-	uint8 Firemode;
+	bool bAuto;
 	UPROPERTY(EditAnywhere)
 	uint16 BulletCount;
 	UPROPERTY(EditAnywhere)
 	uint16 SwitchingBulletCount;
+
+	
 	
 
 	UPROPERTY(EditAnywhere)

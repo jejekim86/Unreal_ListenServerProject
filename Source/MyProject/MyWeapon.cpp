@@ -54,10 +54,36 @@ void AMyWeapon::Fire()
 	if (!Mesh || !WeaponData->FireAnim) return;
 	Mesh->PlayAnimation(WeaponData->FireAnim, false);
 	Mesh->GetSingleNodeInstance()->SetPosition(0.f,true);
+	
+	//BulletCount--;
+}
 
+void AMyWeapon::StartFire()
+{
+	if (BulletCount <= 0) return;
+
+	switch (WeaponData->bAuto)
+	{
+	case true:
+		GetWorldTimerManager().SetTimer(AutoFireTimer, this, &AMyWeapon::Fire, WeaponData->FireRate, true);
+		break;
+	}
+	Fire();
+}
+
+void AMyWeapon::StopFire()
+{
+	GetWorldTimerManager().ClearTimer(AutoFireTimer);
 }
 
 void AMyWeapon::Reload()
 {
 	Mesh->PlayAnimation(WeaponData->ReloadAnim, false);
+	
+	if (SwitchingBulletCount - (WeaponData->BulletCount - BulletCount) < 0)
+	{
+		SwitchingBulletCount -= (WeaponData->BulletCount - BulletCount);
+		BulletCount = WeaponData->BulletCount;
+	}
+	
 }

@@ -40,7 +40,9 @@ public:
 	FORCEINLINE USceneComponent* GetSocket3P() { return WeaponSocket3P; }
 
 	UFUNCTION(Server, Reliable)
-	void Fire();
+	void StartFire();
+	UFUNCTION(Server, Reliable)
+	void StopFire();
 	
 protected:
 	// Called when the game starts or when spawned

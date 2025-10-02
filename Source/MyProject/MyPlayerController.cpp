@@ -27,7 +27,8 @@ void AMyPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMyPlayerController::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMyPlayerController::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AMyPlayerController::Jump);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AMyPlayerController::Attack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &AMyPlayerController::Attack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AMyPlayerController::StopAttack);
 	}
 }
 
@@ -50,8 +51,14 @@ void AMyPlayerController::Attack(const FInputActionValue& value)
 {
 	const bool bPressed  = value.Get<bool>();
 	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(GetCharacter()))
-		MyCharacter->Fire();
-	
+		MyCharacter->StartFire();
+}
+
+void AMyPlayerController::StopAttack(const FInputActionValue& value)
+{
+	const bool bPressed  = value.Get<bool>();
+	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(GetCharacter()))
+		MyCharacter->StopFire();
 }
 
 void AMyPlayerController::Jump()

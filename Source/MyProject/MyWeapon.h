@@ -28,6 +28,7 @@ public:
 	USceneComponent* Root;
 	uint16 BulletCount;
 	uint16 SwitchingBulletCount;
+	FTimerHandle AutoFireTimer;
 
 	UPROPERTY(EditAnywhere)
 	UMyWeaponData* WeaponData;
@@ -35,6 +36,8 @@ public:
 	void OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 	void Fire();
+	void StartFire();
+	void StopFire();
 private:
 	virtual void BeginPlay() override;
 	void Reload();

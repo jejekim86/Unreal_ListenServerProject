@@ -25,12 +25,17 @@ AMyCharacter::AMyCharacter()
 	WeaponSocket1P->SetupAttachment(Mesh1P);
 	WeaponSocket3P->SetupAttachment(GetMesh());
 }
-float FireInterval = 3.f;
-void AMyCharacter::Fire_Implementation()
+void AMyCharacter::StartFire_Implementation()
 {
 	if (!EquipWeapon) return;
-	
-	EquipWeapon->Fire();
+	EquipWeapon->StartFire();
+}
+
+void AMyCharacter::StopFire_Implementation()
+{
+	if (!EquipWeapon) return;
+	EquipWeapon->StopFire();
+
 }
 
 // Called when the game starts or when spawned
