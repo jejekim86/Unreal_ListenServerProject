@@ -67,8 +67,8 @@ public:
 	uint16 SwitchingBulletCount;
 
 	
-	
-
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* FireTracerFX;
 	UPROPERTY(EditAnywhere)
 	EWeaponType WeaponType;
 	UPROPERTY(EditAnywhere)

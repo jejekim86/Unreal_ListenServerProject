@@ -23,6 +23,9 @@ public:
 	USkeletalMeshComponent* Mesh;
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* SphereColl;
+	UPROPERTY(EditDefaultsOnly, Category="FX")
+	FName MuzzleName = "MuzzleFlash";
+	
 
 	UMyWeaponComponent* WeaponComponent;
 	USceneComponent* Root;
@@ -34,7 +37,10 @@ public:
 	UMyWeaponData* WeaponData;
 	UFUNCTION()
 	void OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void FireTracer(FVector Start, FVector Impact);
+
 	void Fire();
 	void StartFire();
 	void StopFire();
