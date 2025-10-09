@@ -39,9 +39,7 @@ public:
 	FORCEINLINE USceneComponent* GetSocket1P() { return WeaponSocket1P; }
 	FORCEINLINE USceneComponent* GetSocket3P() { return WeaponSocket3P; }
 
-	UFUNCTION(Server, Reliable)
 	void StartFire();
-	UFUNCTION(Server, Reliable)
 	void StopFire();
 	
 protected:

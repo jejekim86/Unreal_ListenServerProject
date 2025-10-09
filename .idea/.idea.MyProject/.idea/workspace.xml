@@ -14,13 +14,12 @@
   <component name="ChangeListManager">
     <list default="true" id="177aaa3d-7e94-405d-95a3-079c1f1bc88c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MyProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MyProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Weapon/DA_Weapon.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Weapon/DA_Weapon.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/NewLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/NewLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_WeaponsPacks/MilitaryWeapDark/Weapons/Anims/Fire_Rifle_W.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_WeaponsPacks/MilitaryWeapDark/Weapons/Anims/Fire_Rifle_W.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/_WeaponsPacks/MilitaryWeapDark/Weapons/Assault_Rifle_B.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_WeaponsPacks/MilitaryWeapDark/Weapons/Assault_Rifle_B.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyCharacter.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/MyProject/MyWeapon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyWeapon.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/MyProject/MyWeapon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyWeapon.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyWeaponData.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyWeaponData.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +70,10 @@
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/Particles/ParticleSystemComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/Actor.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/Character.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/Controller.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/Particles/ParticleComponents.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Public/ParticleEmitterInstances.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Public/TimerManager.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/MyProject/MyPlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/MyProject/MyPlayerController.h" root0="FORCE_HIGHLIGHTING" />
@@ -90,7 +92,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;C/C++ 프로젝트.MyProject.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ 프로젝트.MyProject.executor&quot;: &quot;Debug&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
@@ -241,6 +243,15 @@
       <workItem from="1759384578167" duration="16967000" />
       <workItem from="1759414474212" duration="4510000" />
       <workItem from="1759461107052" duration="25066000" />
+      <workItem from="1759544650233" duration="4856000" />
+      <workItem from="1759586867901" duration="4527000" />
+      <workItem from="1759639995148" duration="1844000" />
+      <workItem from="1759732793794" duration="2060000" />
+      <workItem from="1759752001870" duration="3665000" />
+      <workItem from="1759767739752" duration="2048000" />
+      <workItem from="1759816751132" duration="6263000" />
+      <workItem from="1759909734303" duration="8057000" />
+      <workItem from="1759991652952" duration="6788000" />
     </task>
     <servers />
   </component>

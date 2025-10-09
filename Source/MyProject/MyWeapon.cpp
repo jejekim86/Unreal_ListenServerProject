@@ -5,6 +5,7 @@
 #include "MyCharacter.h"
 #include "Animation/AnimSingleNodeInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "Camera/PlayerCameraManager.h"
 #include "Particles/ParticleSystemComponent.h"
 // Sets default values
 AMyWeapon::AMyWeapon()
@@ -48,6 +49,7 @@ void AMyWeapon::OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedCompon
 		FAttachmentTransformRules rules(EAttachmentRule::SnapToTarget, true);
 		Mesh->AttachToComponent(MyCharacter->GetSocket1P(), rules, TEXT("1P_Equipped"));
 		MyCharacter->SetEquipWeapon(this);
+		SetOwner(MyCharacter);
 		FlushNetDormancy();
 	}
 }
@@ -56,35 +58,42 @@ void AMyWeapon::OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedCompon
 void AMyWeapon::Fire()
 {
 	if (!Mesh || !WeaponData->FireAnim) return;
-	
 	Mesh->PlayAnimation(WeaponData->FireAnim, false);
 	Mesh->GetSingleNodeInstance()->SetPosition(0.f, true);
 	//BulletCount--;
-	FHitResult Hit;
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if (!OwnerPawn || !OwnerPawn->GetController())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OwnerPawn or OwnerPawn->GetController() is null"));
+		return;
+	}
 
-	const FTransform MuzzleTr = Mesh->GetSocketTransform(MuzzleName, RTS_World);
-	const FVector StartWS = MuzzleTr.GetLocation();
-	const FVector dir = MuzzleTr.GetRotation().GetForwardVector();
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("%s"), *dir.ToString()));
-	const FVector EndWS = StartWS + dir * 10000.f;
+	// 1) 카메라의 정면 방향
+	FVector CamLoc;
+	FRotator CamRot;
+	OwnerPawn->GetController()->GetPlayerViewPoint(CamLoc, CamRot);
 
-	
-	//const FVector StartWS = Mesh->GetSocketLocation(MuzzleName);
-	//const FVector EndWS = Mesh->GetSocketLocation(MuzzleName);
+	const FVector CamForward = CamRot.Vector(); // 화면 중앙(전면)	
 
-	FireTracer(StartWS, EndWS);
+	// 2) 머즐에서 그 방향으로 직진
+	const FVector StartWS = Mesh->GetSocketLocation(MuzzleName) + CamForward * 80.f;
+	const FVector EndWS = StartWS + CamForward * 15000.f; // 직선
+
+	const FRotator ShotRot = (EndWS - StartWS).Rotation(); // 발사 방향 회전
+
+	// 3) 코스메틱 트레이서
+	FireTracer(StartWS, EndWS, ShotRot); // (Multicast RPC 권장)
 }
 
-void AMyWeapon::FireTracer_Implementation(FVector Start, FVector Impact)
+void AMyWeapon::FireTracer_Implementation(FVector Start, FVector Impact, FRotator Rotation)
 {
 	UParticleSystemComponent* MuzzlePSC =
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponData->FireTracerFX, Start);
-
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponData->FireTracerFX, Start, Rotation);
 
 	if (!MuzzlePSC) return;
-	
-	MuzzlePSC->SetBeamSourcePoint(0, Start, 0);
-	MuzzlePSC->SetBeamTargetPoint(0, Impact, 0);
+
+	//MuzzlePSC->SetBeamSourcePoint(0, Start, 0);
+	//MuzzlePSC->SetBeamTargetPoint(0, Impact, 0);
 }
 
 void AMyWeapon::StartFire()

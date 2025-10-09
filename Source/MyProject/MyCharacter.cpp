@@ -25,13 +25,13 @@ AMyCharacter::AMyCharacter()
 	WeaponSocket1P->SetupAttachment(Mesh1P);
 	WeaponSocket3P->SetupAttachment(GetMesh());
 }
-void AMyCharacter::StartFire_Implementation()
+void AMyCharacter::StartFire()
 {
 	if (!EquipWeapon) return;
 	EquipWeapon->StartFire();
 }
 
-void AMyCharacter::StopFire_Implementation()
+void AMyCharacter::StopFire()
 {
 	if (!EquipWeapon) return;
 	EquipWeapon->StopFire();
