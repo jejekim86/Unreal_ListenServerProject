@@ -52,7 +52,7 @@ class MYPROJECT_API UMyWeaponData : public UMyItemData
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere)
-	float Damage;
+	uint16 Damage;
 	UPROPERTY(EditAnywhere)
 	float FireRate;
 	UPROPERTY(EditAnywhere)

@@ -17,6 +17,7 @@ AMyWeapon::AMyWeapon()
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	SetRootComponent(Root);
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	Bullet = CreateDefaultSubobject<AMyBullet>(TEXT("Bullet"));
 	Mesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 	SphereColl = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
 	SphereColl->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -36,6 +37,7 @@ void AMyWeapon::BeginPlay()
 	Super::BeginPlay();
 	Mesh->SetSkeletalMesh(WeaponData->Mesh);
 	BulletCount = WeaponData->BulletCount;
+	Bullet->SetData(WeaponData->FireTracerFX,WeaponData->FireRate, WeaponData->Damage);
 }
 
 void AMyWeapon::OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -88,12 +90,12 @@ void AMyWeapon::Fire()
 void AMyWeapon::FireTracer_Implementation(FVector Start, FVector Impact, FRotator Rotation)
 {
 	UParticleSystemComponent* MuzzlePSC =
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponData->FireTracerFX, Start, Rotation);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponData->FireTracerFX, Start, Rotation, true, EPSCPoolMethod::AutoRelease);
 
 	if (!MuzzlePSC) return;
-
-	//MuzzlePSC->SetBeamSourcePoint(0, Start, 0);
-	//MuzzlePSC->SetBeamTargetPoint(0, Impact, 0);
+	
+	MuzzlePSC->SetBeamSourcePoint(0, Start, 0);
+	MuzzlePSC->SetBeamTargetPoint(0, Start, 0);
 }
 
 void AMyWeapon::StartFire()

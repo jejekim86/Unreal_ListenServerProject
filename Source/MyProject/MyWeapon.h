@@ -7,6 +7,7 @@
 #include "MyWeaponData.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
+#include "MyBullet.h"
 #include "MyWeapon.generated.h"
 
 
@@ -26,12 +27,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="FX")
 	FName MuzzleName = "MuzzleFlash";
 	
-
 	UMyWeaponComponent* WeaponComponent;
+	
+	UPROPERTY(VisibleAnywhere)
+	AMyBullet* Bullet;
 	USceneComponent* Root;
 	uint16 BulletCount;
 	uint16 SwitchingBulletCount;
 	FTimerHandle AutoFireTimer;
+	FTimerHandle TracerTimer;
 
 	UPROPERTY(EditAnywhere)
 	UMyWeaponData* WeaponData;
