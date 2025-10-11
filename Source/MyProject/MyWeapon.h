@@ -28,23 +28,18 @@ public:
 	FName MuzzleName = "MuzzleFlash";
 	
 	UMyWeaponComponent* WeaponComponent;
-	
-	UPROPERTY(VisibleAnywhere)
-	AMyBullet* Bullet;
 	USceneComponent* Root;
 	uint16 BulletCount;
 	uint16 SwitchingBulletCount;
 	FTimerHandle AutoFireTimer;
 	FTimerHandle TracerTimer;
-
+	UPROPERTY(EditDefaultsOnly, Category="Weapon|Projectile")
+	TSubclassOf<class AMyBullet> BulletClass;
 	UPROPERTY(EditAnywhere)
 	UMyWeaponData* WeaponData;
 	UFUNCTION()
 	void OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UFUNCTION(NetMulticast, Unreliable)
-	void FireTracer(FVector Start, FVector Impact, FRotator Rotation);
-	//UFUNCTION(Server, Unreliable)
 	void Fire();
 	void StartFire();
 	void StopFire();

@@ -4,7 +4,6 @@
 #include "MyWeapon.h"
 #include "MyCharacter.h"
 #include "Animation/AnimSingleNodeInstance.h"
-#include "Kismet/GameplayStatics.h"
 #include "Camera/PlayerCameraManager.h"
 #include "Particles/ParticleSystemComponent.h"
 // Sets default values
@@ -17,8 +16,8 @@ AMyWeapon::AMyWeapon()
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	SetRootComponent(Root);
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	Bullet = CreateDefaultSubobject<AMyBullet>(TEXT("Bullet"));
 	Mesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	BulletClass = AMyBullet::StaticClass();
 	SphereColl = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
 	SphereColl->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereColl->SetGenerateOverlapEvents(true);
@@ -37,7 +36,6 @@ void AMyWeapon::BeginPlay()
 	Super::BeginPlay();
 	Mesh->SetSkeletalMesh(WeaponData->Mesh);
 	BulletCount = WeaponData->BulletCount;
-	Bullet->SetData(WeaponData->FireTracerFX,WeaponData->FireRate, WeaponData->Damage);
 }
 
 void AMyWeapon::OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -80,23 +78,34 @@ void AMyWeapon::Fire()
 	// 2) 머즐에서 그 방향으로 직진
 	const FVector StartWS = Mesh->GetSocketLocation(MuzzleName) + CamForward * 80.f;
 	const FVector EndWS = StartWS + CamForward * 15000.f; // 직선
-
 	const FRotator ShotRot = (EndWS - StartWS).Rotation(); // 발사 방향 회전
+	FActorSpawnParameters SP;
+	SP.Owner = this;           // 발사자(중요)
+	SP.Instigator = OwnerPawn; // 발사자(중요)
 
-	// 3) 코스메틱 트레이서
-	FireTracer(StartWS, EndWS, ShotRot); // (Multicast RPC 권장)
-}
-
-void AMyWeapon::FireTracer_Implementation(FVector Start, FVector Impact, FRotator Rotation)
-{
-	UParticleSystemComponent* MuzzlePSC =
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponData->FireTracerFX, Start, Rotation, true, EPSCPoolMethod::AutoRelease);
-
-	if (!MuzzlePSC) return;
 	
-	MuzzlePSC->SetBeamSourcePoint(0, Start, 0);
-	MuzzlePSC->SetBeamTargetPoint(0, Start, 0);
+	AMyBullet* Bullet = GetWorld()->SpawnActor<AMyBullet>(BulletClass, StartWS, ShotRot, SP);
+	// 3) 코스메틱 트레이서
+	if (!Bullet)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bullet is null"));
+		return;
+	}
+	
+	Bullet->SetData(WeaponData->FireTracerFX, WeaponData->Damage);
+	Bullet->Fire(StartWS, EndWS, ShotRot);
 }
+
+//void AMyWeapon::FireTracer_Implementation(FVector Start, FVector Impact, FRotator Rotation)
+//{
+//	UParticleSystemComponent* MuzzlePSC =
+//		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponData->FireTracerFX, Start, Rotation, true, EPSCPoolMethod::AutoRelease);
+//	
+//	if (!MuzzlePSC) return;
+//	
+//	MuzzlePSC->SetBeamSourcePoint(0, Start, 0);
+//	MuzzlePSC->SetBeamTargetPoint(0, Start, 0);
+//}
 
 void AMyWeapon::StartFire()
 {

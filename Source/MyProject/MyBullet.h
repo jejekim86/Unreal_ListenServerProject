@@ -20,12 +20,12 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class USphereComponent* SphereColl = nullptr;
 	UFUNCTION()
-	void OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	//void OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	
-	void SetData(UParticleSystem* FX, float speed, uint16 damage);
+	void SetData(UParticleSystem* FX, uint16 damage);
+	UFUNCTION(NetMulticast, Unreliable)
+	void Fire(FVector Start, FVector Direction, FRotator Rotation);
 private:
-	float FireSpeed;
 	uint16 Damage;
 	
 };
