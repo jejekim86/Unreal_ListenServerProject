@@ -13,7 +13,6 @@ AMyCharacter::AMyCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	
 	PrimaryActorTick.bCanEverTick = true;
-	bWeaponEquipped = false;
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh1P"));
 	Camera->bUsePawnControlRotation = true;
@@ -24,6 +23,7 @@ AMyCharacter::AMyCharacter()
 	WeaponSocket3P = CreateDefaultSubobject<USceneComponent>(TEXT("Socket3P"));
 	WeaponSocket1P->SetupAttachment(Mesh1P);
 	WeaponSocket3P->SetupAttachment(GetMesh());
+	
 }
 void AMyCharacter::StartFire()
 {

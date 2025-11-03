@@ -26,16 +26,14 @@ public:
 	float Speed;
 	UPROPERTY(BlueprintReadOnly)
 	float Direction;
-	UPROPERTY(BlueprintReadOnly)
-	bool bWeaponEquipped;
 	UPROPERTY(EDITANYWHERE)
 	USceneComponent* WeaponSocket1P;
 	UPROPERTY(EDITANYWHERE)
 	USceneComponent* WeaponSocket3P;
 
-	AMyWeapon* EquipWeapon;
 
 	FORCEINLINE void SetEquipWeapon(AMyWeapon* NewWeapon) { EquipWeapon = NewWeapon; }
+	FORCEINLINE AMyWeapon* GetEquipWeapon() { return EquipWeapon; }
 	FORCEINLINE USceneComponent* GetSocket1P() { return WeaponSocket1P; }
 	FORCEINLINE USceneComponent* GetSocket3P() { return WeaponSocket3P; }
 
@@ -45,6 +43,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+private:
+		AMyWeapon* EquipWeapon;
 
 public:	
 	// Called every frame

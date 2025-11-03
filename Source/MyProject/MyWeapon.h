@@ -31,6 +31,7 @@ public:
 	USceneComponent* Root;
 	uint16 BulletCount;
 	uint16 SwitchingBulletCount;
+
 	FTimerHandle AutoFireTimer;
 	FTimerHandle TracerTimer;
 	UPROPERTY(EditDefaultsOnly, Category="Weapon|Projectile")
@@ -39,8 +40,11 @@ public:
 	UMyWeaponData* WeaponData;
 	UFUNCTION()
 	void OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
+	UFUNCTION(Server, reliable)
 	void Fire();
+	UFUNCTION(NetMulticast, reliable)
+	void MulticastTracer(const FVector& start, const FVector& end, const FRotator& rotation);
+
 	void StartFire();
 	void StopFire();
 private:

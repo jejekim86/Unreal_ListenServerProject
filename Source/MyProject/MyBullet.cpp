@@ -5,6 +5,7 @@
 
 #include "RenderCore.h"
 #include "Components/SphereComponent.h"
+#include "Evaluation/Blending/MovieSceneBlendType.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -12,6 +13,8 @@
 // Sets default values
 AMyBullet::AMyBullet()
 {
+	bReplicates = true;
+	SetReplicateMovement(true);
 	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	SetRootComponent(RootComponent);
@@ -26,7 +29,7 @@ AMyBullet::AMyBullet()
 	ProjectileMovement->bShouldBounce = false;
 	ProjectileMovement->ProjectileGravityScale = 0.f;
 	ProjectileMovement->InitialSpeed = 1500.f;
-	ProjectileMovement->MaxSpeed = 2000.f;
+	ProjectileMovement->bInitialVelocityInLocalSpace = true;
 	//SphereColl->SetupAttachment(RootComponent);
 
 	//SphereColl->OnComponentBeginOverlap.AddDynamic(this, &AMyBullet::OnPickUpSphereBeginOverlap);
@@ -44,13 +47,14 @@ void AMyBullet::SetData(UParticleSystem* FX, uint16 damage)
 	Damage = damage;
 }
 
-void AMyBullet::Fire_Implementation(FVector Start, FVector Direction, FRotator Rotation)
+void AMyBullet::Fire_Implementation(FVector Start, FVector End, FRotator Rotation)
 {
 	//UParticleSystemComponent* MuzzlePSC =
 	//	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerFX, Start, Rotation, true, EPSCPoolMethod::AutoRelease);
-
 	UParticleSystemComponent* TracerPSC =
-		UGameplayStatics::SpawnEmitterAttached(TracerFX, SphereColl, NAME_None, Start, Rotation, EAttachLocation::KeepRelativeOffset, true);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerFX, Start,Rotation,true,EPSCPoolMethod::AutoRelease);
+	//	UGameplayStatics::SpawnEmitterAttached(TracerFX, SphereColl, NAME_None, Start, Rotation, EAttachLocation::KeepRelativeOffset, true);
+
 
 	//SetActorLocation(Start);
 	//SetActorRotation(Rotation);
@@ -61,6 +65,6 @@ void AMyBullet::Fire_Implementation(FVector Start, FVector Direction, FRotator R
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("TracerPSC is null"));
 		return;
 	}
-
-	ProjectileMovement->Velocity = Start * ProjectileMovement->InitialSpeed;
+	
+	ProjectileMovement->Velocity = (FVector::ForwardVector * ProjectileMovement->InitialSpeed);
 }

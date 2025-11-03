@@ -24,7 +24,7 @@ public:
 
 	void SetData(UParticleSystem* FX, uint16 damage);
 	UFUNCTION(NetMulticast, Unreliable)
-	void Fire(FVector Start, FVector Direction, FRotator Rotation);
+	void Fire(FVector Start, FVector End, FRotator Rotation);
 private:
 	uint16 Damage;
 	
