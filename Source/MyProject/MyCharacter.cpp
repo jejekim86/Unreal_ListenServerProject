@@ -10,8 +10,8 @@
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
 	PrimaryActorTick.bCanEverTick = true;
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh1P"));
@@ -23,8 +23,8 @@ AMyCharacter::AMyCharacter()
 	WeaponSocket3P = CreateDefaultSubobject<USceneComponent>(TEXT("Socket3P"));
 	WeaponSocket1P->SetupAttachment(Mesh1P);
 	WeaponSocket3P->SetupAttachment(GetMesh());
-	
 }
+
 void AMyCharacter::StartFire()
 {
 	if (!EquipWeapon) return;
@@ -35,14 +35,12 @@ void AMyCharacter::StopFire()
 {
 	if (!EquipWeapon) return;
 	EquipWeapon->StopFire();
-
 }
 
 // Called when the game starts or when spawned
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame

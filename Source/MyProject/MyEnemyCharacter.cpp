@@ -2,7 +2,6 @@
 
 
 #include "MyEnemyCharacter.h"
-#include "AIController.h"
 #include "MyEnemyAIController.h"
 
 // Sets default values
@@ -25,7 +24,7 @@ void AMyEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 }
-
+	
 
 
 

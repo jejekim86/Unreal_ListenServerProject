@@ -23,11 +23,11 @@ AMyEnemyAIController::AMyEnemyAIController()
 void AMyEnemyAIController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	if (BTAsset != nullptr)
 		RunBehaviorTree(BTAsset);
-
-	RunAI();
+	
+		RunAI();
 }
 
 void AMyEnemyAIController::RunAI()
@@ -37,6 +37,6 @@ void AMyEnemyAIController::RunAI()
 	if (UseBlackboard(BBAsset, BlackboardPtr))
 	{
 		Blackboard->SetValueAsVector("HomePos",GetPawn()->GetActorLocation());
-		ensure(RunBehaviorTree(BTAsset));
+		RunBehaviorTree(BTAsset);
 	}
 }
