@@ -33,7 +33,12 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	class UBlackboardData* BBAsset;
-
+	
+	UPROPERTY()
+	UAISenseConfig_Sight* SightConfig;
 
 	void RunAI();
+	
+	UFUNCTION()
+	void OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 };

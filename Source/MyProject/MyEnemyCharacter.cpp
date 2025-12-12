@@ -2,7 +2,9 @@
 
 
 #include "MyEnemyCharacter.h"
-#include "MyEnemyAIController.h"
+#include "Net/UnrealNetwork.h"   // ⬅ 반드시 필요
+
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AMyEnemyCharacter::AMyEnemyCharacter()
@@ -11,7 +13,7 @@ AMyEnemyCharacter::AMyEnemyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 	SetReplicateMovement(true);
-
+	
 	//ConstructorHelpers::FClassFinder<AMyEnemyAIController> AIControllerRef(TEXT("/Game/BP/Monster/BP_MyEnemyAIController.BP_MyEnemyAIController_C"));
 	//if (AIControllerRef.Class != nullptr)
 	//	AIControllerClass = AIControllerRef.Class;
@@ -20,10 +22,41 @@ AMyEnemyCharacter::AMyEnemyCharacter()
 	//AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
+void AMyEnemyCharacter::Attack()
+{
+	if (HasAuthority())
+		ServerAttack();
+}
+
+void AMyEnemyCharacter::OnHit()
+{
+	if (HasAuthority())
+		ServerOnHit();
+}
+
+void AMyEnemyCharacter::ServerAttack_Implementation()
+{
+	bIsAttack = true;
+}
+
 void AMyEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 }
+
+void AMyEnemyCharacter::ServerOnHit_Implementation()
+{
+	bOnHit = true;
+}
+
+void AMyEnemyCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AMyEnemyCharacter, bIsAttack);
+	DOREPLIFETIME(AMyEnemyCharacter, health);
+	DOREPLIFETIME(AMyEnemyCharacter, bOnHit);
+}
+
 	
 
 

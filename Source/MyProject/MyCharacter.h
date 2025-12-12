@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemComponent.h"
 #include "MyWeapon.h"
 #include "MyCharacter.generated.h"
 
@@ -31,7 +32,9 @@ public:
 	UPROPERTY(EDITANYWHERE)
 	USceneComponent* WeaponSocket3P;
 
-
+	UPROPERTY(EDITANYWHERE)
+	UAbilitySystemComponent* AbilitySystemComp;
+	
 	FORCEINLINE void SetEquipWeapon(AMyWeapon* NewWeapon) { EquipWeapon = NewWeapon; }
 	FORCEINLINE AMyWeapon* GetEquipWeapon() { return EquipWeapon; }
 	FORCEINLINE USceneComponent* GetSocket1P() { return WeaponSocket1P; }

@@ -13,7 +13,37 @@ class MYPROJECT_API AMyEnemyCharacter : public ACharacter
 
 public:
 	AMyEnemyCharacter();
+	
+	UPROPERTY(Replicated)
+	uint32 health = 100;
+	
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="Combat")
+	bool bIsAttack = false;
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="Combat")
+	bool bOnHit = false;
+	
+	UFUNCTION(BlueprintCallable, Category="Combat")
+	void Attack();
+	
+	UFUNCTION(BlueprintCallable, Category="Combat")
+	void OnHit();
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
+	float AttackRange = 200.f;
+	
 	virtual void BeginPlay() override;
+	
+	void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	
+protected:
+	UFUNCTION(Server, Reliable)
+	void ServerAttack();
+	
+	UFUNCTION(Server, Reliable)
+	void ServerOnHit();
+
+	
+	//UFUNCTION(NetMulticast, Reliable)
+	//void MulticastAttackMontage();
+	
 };
