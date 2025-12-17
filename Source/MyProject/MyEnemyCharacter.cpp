@@ -2,8 +2,6 @@
 
 
 #include "MyEnemyCharacter.h"
-#include "Net/UnrealNetwork.h"   // ⬅ 반드시 필요
-
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -22,33 +20,6 @@ AMyEnemyCharacter::AMyEnemyCharacter()
 	//AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
-void AMyEnemyCharacter::Attack()
-{
-	if (HasAuthority())
-		ServerAttack();
-}
-
-void AMyEnemyCharacter::OnHit()
-{
-	if (HasAuthority())
-		ServerOnHit();
-}
-
-void AMyEnemyCharacter::ServerAttack_Implementation()
-{
-	bIsAttack = true;
-}
-
-void AMyEnemyCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-void AMyEnemyCharacter::ServerOnHit_Implementation()
-{
-	bOnHit = true;
-}
-
 void AMyEnemyCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -57,7 +28,41 @@ void AMyEnemyCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 	DOREPLIFETIME(AMyEnemyCharacter, bOnHit);
 }
 
+void AMyEnemyCharacter::Attack(AActor* Target)
+{
+	if (!Target) return;
 	
+	if (HasAuthority())
+		ServerAttack(Target);
+}
 
+void AMyEnemyCharacter::OnHit(float Damage)
+{
+	if (HasAuthority())
+		ServerOnHit(Damage);
+}
 
+bool AMyEnemyCharacter::IsInAttackRange(const AActor* Target) const
+{
+	if (!Target) return false;
+	
+	const float distance = FVector::DistSquared(GetActorLocation(), Target->GetActorLocation());
+	return distance <= FMath::Square(AttackRange);
+}
+
+void AMyEnemyCharacter::ServerAttack_Implementation(AActor* Target)
+{
+	if (!Target) return;
+	bIsAttack = IsInAttackRange(Target);
+}
+
+void AMyEnemyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AMyEnemyCharacter::ServerOnHit_Implementation(float Damage)
+{
+	bOnHit = true;
+}
 

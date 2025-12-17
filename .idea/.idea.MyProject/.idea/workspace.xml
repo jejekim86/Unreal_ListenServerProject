@@ -14,23 +14,13 @@
   <component name="ChangeListManager">
     <list default="true" id="177aaa3d-7e94-405d-95a3-079c1f1bc88c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MyProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MyProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/AB_1PPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/AB_1PPlayer.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/AB_Player.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/AB_Player.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Monster/BB_Enemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Monster/BB_Enemy.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Monster/AB_HeadEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Monster/AB_HeadEnemy.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Monster/BP_MyEnemyCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Monster/BP_MyEnemyCharacter.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Monster/BT_Enemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Monster/BT_Enemy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Weapon/BP_MyWeapon.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Weapon/BP_MyWeapon.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Monster/TestBP_Task.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Main.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Main.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ZombieAnimationPack/Animations/ABP_Monster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ZombieAnimationPack/Animations/ABP_Monster.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyProject.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/MyProject.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyEnemyAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyEnemyAIController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyEnemyAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyEnemyAIController.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/MyProject/MyEnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyEnemyCharacter.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/MyProject/MyEnemyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyEnemyCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyProject.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyProject.Build.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyWeapon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyWeapon.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +51,6 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://1" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/AIModule/Classes/AIController.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/AIModule/Classes/Perception/AIPerceptionComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/AIModule/Classes/Perception/AISenseConfig.h" root0="FORCE_HIGHLIGHTING" />
@@ -353,6 +342,12 @@
       <workItem from="1765431934528" duration="5629000" />
       <workItem from="1765489406258" duration="2341000" />
       <workItem from="1765492498511" duration="7179000" />
+      <workItem from="1765762685181" duration="9524000" />
+      <workItem from="1765873863878" duration="819000" />
+      <workItem from="1765878248624" duration="2602000" />
+      <workItem from="1765881206921" duration="947000" />
+      <workItem from="1765882202766" duration="3980000" />
+      <workItem from="1765944422631" duration="4879000" />
     </task>
     <servers />
   </component>

@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Net/UnrealNetwork.h"
 #include "MyEnemyCharacter.generated.h"
+
 
 UCLASS()
 class MYPROJECT_API AMyEnemyCharacter : public ACharacter
@@ -17,33 +19,34 @@ public:
 	UPROPERTY(Replicated)
 	uint32 health = 100;
 	
-	UPROPERTY(Replicated, BlueprintReadOnly, Category="Combat")
+	UPROPERTY(Replicated, BlueprintReadWrite)
 	bool bIsAttack = false;
+	
 	UPROPERTY(Replicated, BlueprintReadOnly, Category="Combat")
 	bool bOnHit = false;
 	
 	UFUNCTION(BlueprintCallable, Category="Combat")
-	void Attack();
+	void Attack(AActor* Target);
 	
 	UFUNCTION(BlueprintCallable, Category="Combat")
-	void OnHit();
+	void OnHit(float Damage);
+	
+	bool IsInAttackRange(const AActor* Target) const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
 	float AttackRange = 200.f;
 	
 	virtual void BeginPlay() override;
 	
-	void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	
 protected:
 	UFUNCTION(Server, Reliable)
-	void ServerAttack();
+	void ServerAttack(AActor* Target);
 	
 	UFUNCTION(Server, Reliable)
-	void ServerOnHit();
+	void ServerOnHit(float Damage);
 
-	
 	//UFUNCTION(NetMulticast, Reliable)
 	//void MulticastAttackMontage();
-	
 };
