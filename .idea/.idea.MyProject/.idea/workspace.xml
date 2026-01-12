@@ -14,13 +14,31 @@
   <component name="ChangeListManager">
     <list default="true" id="177aaa3d-7e94-405d-95a3-079c1f1bc88c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MyProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MyProject/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/AB_1PPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/AB_1PPlayer.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Monster/AB_HeadEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Monster/AB_HeadEnemy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Monster/BP_MyEnemyCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Monster/BP_MyEnemyCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Monster/BB_Enemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Monster/BB_Enemy.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Monster/BP_AttackTask.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Monster/BP_AttackTask.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Monster/BP_FollowTask.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Monster/BT_Enemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Monster/BT_Enemy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Monster/TestBP_Task.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Weapon/BP_MyBullet.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Weapon/BP_MyBullet.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Weapon/DA_Weapon.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Weapon/DA_Weapon.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BookHeadMonster/Animation/anim_Attack_D.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BookHeadMonster/Animation/anim_Attack_D.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/Mannequins/Meshes/SKM_Manny.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/Mannequins/Meshes/SKM_Manny.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/Mannequins/Meshes/SKM_Quinn_Simple.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/Mannequins/Meshes/SKM_Quinn_Simple.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/Mannequins/Meshes/SK_Mannequin.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/Mannequins/Meshes/SK_Mannequin.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Main.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Main.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Test.umap" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/_AnimationLibrary/ALS/ALS_Props_M4A1_Poses.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_AnimationLibrary/ALS/ALS_Props_M4A1_Poses.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyBullet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyBullet.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyBullet.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyBullet.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyEnemyAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyEnemyAIController.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/MyProject/MyEnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyEnemyCharacter.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/MyProject/MyEnemyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyEnemyCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyWeapon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyWeapon.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyWeapon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyWeapon.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MyProject/MyWeaponData.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MyProject/MyWeaponData.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +68,12 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://3" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://5" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Developer/TraceServices/Private/Analyzers/MiscTraceAnalysis.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/AutomationTool/AutomationTool.csproj" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/AutomationTool/Scripts/PackageCommand.Automation.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.AspNet/ServerTimings.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/AIModule/Classes/AIController.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/AIModule/Classes/Perception/AIPerceptionComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/AIModule/Classes/Perception/AISenseConfig.h" root0="FORCE_HIGHLIGHTING" />
@@ -63,6 +86,8 @@
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/HAL/Platform.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Math/MathFwd.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Math/UnrealMathVectorCommon.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Private/UObject/Obj.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Public/Templates/SubclassOf.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Public/UObject/Object.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectPtr.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Public/UObject/UObjectGlobals.h" root0="FORCE_HIGHLIGHTING" />
@@ -82,7 +107,9 @@
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/Character.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/Controller.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/DamageType.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/MovementComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/PainCausingVolume.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/Pawn.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/PlayerController.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/ProjectileMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
@@ -98,6 +125,7 @@
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/Particles/ParticleComponents.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/TimerManager.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Public/Net/UnrealNetwork.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Public/ParticleEmitterInstances.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Public/TimerManager.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/MyProject/MyBullet.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -109,9 +137,13 @@
     <setting file="file://$PROJECT_DIR$/Source/MyProject/MyWeaponComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/MyProject/MyWeaponData.h" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Toolset" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -122,31 +154,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;C/C++ 프로젝트.MyProject.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;UnrealLinkOptionsId&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET 실행 설정 프로파일.EpicGames.AspNet.executor": "Run",
+    "C/C++ 프로젝트.MyProject.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "CodeWithMe",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RecapSpentCounter">
+    <option name="endsOfQuotaMs" value="1769234443935" />
+    <option name="spentUsd" value="0.064381145" />
+  </component>
+  <component name="RecapUselessUpdatesCounter">
+    <option name="suspendCountdown" value="0" />
+  </component>
   <component name="RecentsManager">
     <key name="CidrLocalAttachDebugger.recentlyUsed">
       <recent name="com.jetbrains.rider.cpp.debugger.RiderCppLLDBDriverConfiguration" />
     </key>
   </component>
-  <component name="RunManager" selected="C/C++ 프로젝트.MyProject">
+  <component name="RunManager" selected=".NET 실행 설정 프로파일.EpicGames.AspNet">
     <configuration name="MyProject" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
         <option name="CONFIGURATION" value="Development_Editor" />
@@ -347,7 +388,27 @@
       <workItem from="1765878248624" duration="2602000" />
       <workItem from="1765881206921" duration="947000" />
       <workItem from="1765882202766" duration="3980000" />
-      <workItem from="1765944422631" duration="4879000" />
+      <workItem from="1765944422631" duration="5484000" />
+      <workItem from="1766384310306" duration="2661000" />
+      <workItem from="1766404849635" duration="2940000" />
+      <workItem from="1766730245485" duration="1420000" />
+      <workItem from="1766732863948" duration="7661000" />
+      <workItem from="1766961645062" duration="7892000" />
+      <workItem from="1766973337294" duration="1167000" />
+      <workItem from="1767003762434" duration="8426000" />
+      <workItem from="1767072737007" duration="4062000" />
+      <workItem from="1767164774876" duration="3423000" />
+      <workItem from="1767342947618" duration="7016000" />
+      <workItem from="1767425079782" duration="2478000" />
+      <workItem from="1767616595640" duration="4271000" />
+      <workItem from="1767684639458" duration="5700000" />
+      <workItem from="1767767599765" duration="12461000" />
+      <workItem from="1767858471399" duration="13268000" />
+      <workItem from="1767910805275" duration="15175000" />
+      <workItem from="1767948851904" duration="4383000" />
+      <workItem from="1768169343445" duration="2222000" />
+      <workItem from="1768173812838" duration="2177000" />
+      <workItem from="1768177476895" duration="10795000" />
     </task>
     <servers />
   </component>
