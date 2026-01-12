@@ -1,70 +1,177 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "MyBullet.h"
 
-#include "RenderCore.h"
 #include "Components/SphereComponent.h"
-#include "Evaluation/Blending/MovieSceneBlendType.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Particles/ParticleSystemComponent.h"
+#include "Particles/ParticleSystem.h"
+#include "GameFramework/DamageType.h"
+#include "Components/SkeletalMeshComponent.h"
 
-// Sets default values
 AMyBullet::AMyBullet()
 {
 	bReplicates = true;
 	SetReplicateMovement(true);
-	PrimaryActorTick.bCanEverTick = true;
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-	SetRootComponent(RootComponent);
-	SphereColl = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
-	//SphereColl->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	//SphereColl->SetGenerateOverlapEvents(true);
-	//SphereColl->SetCollisionResponseToAllChannels(ECR_Ignore);
-	//SphereColl->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+	PrimaryActorTick.bCanEverTick = false;
+
+	Collision = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
+	SetRootComponent(Collision);
+	Collision->InitSphereRadius(6.f);
+	Collision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Collision->SetCollisionObjectType(ECC_WorldDynamic);
+	Collision->SetCollisionResponseToAllChannels(ECR_Block);
+	Collision->SetNotifyRigidBodyCollision(true);
+	Collision->OnComponentHit.AddDynamic(this, &AMyBullet::OnBulletHit);
+
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
+	ProjectileMovement->UpdatedComponent = Collision;
+	ProjectileMovement->InitialSpeed = 4500.f;
+	ProjectileMovement->MaxSpeed = 4500.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
-	ProjectileMovement->UpdatedComponent = SphereColl;
-	ProjectileMovement->bShouldBounce = false;
 	ProjectileMovement->ProjectileGravityScale = 0.f;
-	ProjectileMovement->InitialSpeed = 1500.f;
-	ProjectileMovement->bInitialVelocityInLocalSpace = true;
-	//SphereColl->SetupAttachment(RootComponent);
+	ProjectileMovement->bShouldBounce = false;
 
-	//SphereColl->OnComponentBeginOverlap.AddDynamic(this, &AMyBullet::OnPickUpSphereBeginOverlap);
+	InitialLifeSpan = 3.f;
+
+	NetUpdateFrequency = 66.f;
+	MinNetUpdateFrequency = 33.f;
 }
 
-//void AMyBullet::OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-//	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-//{
-//	
-//}
-
-void AMyBullet::SetData(UParticleSystem* FX, uint16 damage)
+void AMyBullet::BeginPlay()
 {
-	TracerFX = FX;
-	Damage = damage;
-}
+	Super::BeginPlay();
 
-void AMyBullet::Fire_Implementation(FVector Start, FVector End, FRotator Rotation)
-{
-	//UParticleSystemComponent* MuzzlePSC =
-	//	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerFX, Start, Rotation, true, EPSCPoolMethod::AutoRelease);
-	UParticleSystemComponent* TracerPSC =
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerFX, Start,Rotation,true,EPSCPoolMethod::AutoRelease);
-	//	UGameplayStatics::SpawnEmitterAttached(TracerFX, SphereColl, NAME_None, Start, Rotation, EAttachLocation::KeepRelativeOffset, true);
-
-
-	//SetActorLocation(Start);
-	//SetActorRotation(Rotation);
-
-
-	if (!TracerPSC)
+	if (APawn* Inst = GetInstigator())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("TracerPSC is null"));
+		Collision->IgnoreActorWhenMoving(Inst, true);
+	}
+
+	if (AActor* OwnerActor = GetOwner())
+	{
+		Collision->IgnoreActorWhenMoving(OwnerActor, true);
+	}
+
+	if (TrailFX)
+	{
+		UGameplayStatics::SpawnEmitterAttached(TrailFX, Collision);
+	}
+}
+
+void AMyBullet::InitBullet(
+	float InDamage,
+	FName InHeadBoneName,
+	TSubclassOf<UDamageType> InBodyDamageType,
+	TSubclassOf<UDamageType> InHeadDamageType,
+	UParticleSystem* InTrailFX,
+	UParticleSystem* InImpactFX,
+	const FVector& InDir
+)
+{
+	Damage = InDamage;
+	HeadBoneName = InHeadBoneName;
+
+	BodyDamageType = InBodyDamageType;
+	HeadDamageType = InHeadDamageType;
+
+	TrailFX = InTrailFX;
+	ImpactFX = InImpactFX;
+
+	FVector Dir = InDir.GetSafeNormal();
+	ProjectileMovement->Velocity = Dir * ProjectileMovement->InitialSpeed;
+	SetActorRotation(Dir.Rotation());
+}
+
+void AMyBullet::OnBulletHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
+                            UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (!HasAuthority())
+		return;
+
+	if (!OtherActor)
+		return;
+
+	if (OtherActor == this)
+		return;
+
+	if (OtherActor == GetOwner())
+		return;
+
+	if (OtherActor == GetInstigator())
+		return;
+
+	FVector ShotDir = GetActorForwardVector();
+	if (ProjectileMovement)
+	{
+		ShotDir = ProjectileMovement->Velocity.GetSafeNormal();
+	}
+
+	ApplyHitDamage(Hit, ShotDir);
+	MulticastImpactFX(Hit.ImpactPoint, Hit.ImpactNormal);
+
+	Destroy();
+}
+
+void AMyBullet::ApplyHitDamage(const FHitResult& Hit, const FVector& ShotDir)
+{
+	AActor* HitActor = Hit.GetActor();
+	if (!HitActor)
+	{
 		return;
 	}
-	
-	ProjectileMovement->Velocity = (FVector::ForwardVector * ProjectileMovement->InitialSpeed);
+
+	bool bHeadshot = false;
+
+	USkeletalMeshComponent* SkelComp = Cast<USkeletalMeshComponent>(Hit.GetComponent());
+	if (SkelComp)
+	{
+		if (HeadBoneName != NAME_None)
+		{
+			if (Hit.BoneName == HeadBoneName)
+			{
+				bHeadshot = true;
+			}
+		}
+	}
+
+	float FinalDamage = Damage;
+	if (bHeadshot)
+	{
+		FinalDamage = Damage * HeadshotMultiplier;
+	}
+
+	TSubclassOf<UDamageType> DT = UDamageType::StaticClass();
+
+	if (bHeadshot)
+	{
+		if (HeadDamageType)
+		{
+			DT = HeadDamageType;
+		}
+	}
+	else
+	{
+		if (BodyDamageType)
+		{
+			DT = BodyDamageType;
+		}
+	}
+
+	UGameplayStatics::ApplyPointDamage(
+		HitActor,
+		FinalDamage,
+		ShotDir,
+		Hit,
+		GetInstigatorController(),
+		this,
+		DT
+	);
+}
+
+void AMyBullet::MulticastImpactFX_Implementation(FVector_NetQuantize ImpactPoint,
+                                                 FVector_NetQuantizeNormal ImpactNormal)
+{
+	if (ImpactFX)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactFX, ImpactPoint, ImpactNormal.Rotation());
+	}
 }

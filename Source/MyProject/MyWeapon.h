@@ -1,54 +1,73 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// MyWeapon.h
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MyWeaponComponent.h"
-#include "MyWeaponData.h"
-#include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
-#include "MyBullet.h"
 #include "MyWeapon.generated.h"
 
+class USceneComponent;
+class USkeletalMeshComponent;
+class USphereComponent;
+class UAnimationAsset;
+class UMyWeaponData;
+class AMyBullet;
 
 UCLASS()
 class MYPROJECT_API AMyWeapon : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
+
+public:
 	AMyWeapon();
 
-	UPROPERTY(EditAnywhere)
-	USkeletalMeshComponent* Mesh;
-	UPROPERTY(VisibleAnywhere)
-	USphereComponent* SphereColl;
-	UPROPERTY(EditDefaultsOnly, Category="FX")
-	FName MuzzleName = "MuzzleFlash";
-	
-	UMyWeaponComponent* WeaponComponent;
-	USceneComponent* Root;
-	uint16 BulletCount;
-	uint16 SwitchingBulletCount;
+protected:
+	virtual void BeginPlay() override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Weapon")
+	USceneComponent* Root = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Weapon")
+	USkeletalMeshComponent* Mesh = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Weapon")
+	USphereComponent* SphereColl = nullptr;
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon")
+	UMyWeaponData* WeaponData = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon")
+	FName MuzzleName = TEXT("MuzzleFlash");
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon")
+	float Range = 15000.f;	
+
+protected:
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="Weapon|Ammo")
+	int32 BulletCount = 0;
+
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="Weapon|Ammo")
+	int32 ReserveAmmo = 0;
 
 	FTimerHandle AutoFireTimer;
-	FTimerHandle TracerTimer;
-	UPROPERTY(EditDefaultsOnly, Category="Weapon|Projectile")
-	TSubclassOf<class AMyBullet> BulletClass;
-	UPROPERTY(EditAnywhere)
-	UMyWeaponData* WeaponData;
-	
-	UFUNCTION()
-	void OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	UFUNCTION(Server, reliable)
-	void Fire();
-	UFUNCTION(NetMulticast, reliable)
-	void MulticastTracer(const FVector& start, const FVector& end, const FRotator& rotation);
 
-	void StartFire();
-	void StopFire();
-private:
-	virtual void BeginPlay() override;
-	void Reload();
+public:
+	// 캐릭터(Server RPC)에서 호출되는 서버 전용 함수
+	void StartFire_Server();
+	void StopFire_Server();
+	void HandleFire_Server();
+	void Reload_Server();
+
+protected:
+	// 무기 애니만 (원하면 이것도 제거하고 Owner 로컬에서만 재생해도 됨)
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastPlayWeaponAnim(UAnimationAsset* Anim);
+
+	bool BuildAimPoint_Server(FVector& OutAimPoint) const;
+
+	UFUNCTION()
+	void OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+								   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+								   const FHitResult& SweepResult);
 };

@@ -31,7 +31,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Combat")
 	void OnHit(float Damage);
 	
-	bool IsInAttackRange(const AActor* Target) const;
+	UFUNCTION(BlueprintCallable)
+	bool IsInAttackRange(AActor* Target);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
 	float AttackRange = 200.f;

@@ -4,7 +4,6 @@
 #include "MyEnemyAIController.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "DynamicMesh/DynamicMesh3.h"
 #include "Perception/AIPerceptionComponent.h"
 
 AMyEnemyAIController::AMyEnemyAIController()
@@ -23,7 +22,7 @@ AMyEnemyAIController::AMyEnemyAIController()
 	
 	SightConfig->SightRadius = 500.f;
 	SightConfig->LoseSightRadius = 550.f;
-	SightConfig->PeripheralVisionAngleDegrees = 90.f;
+	SightConfig->PeripheralVisionAngleDegrees = 120.f;
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies   = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals  = true;
@@ -56,7 +55,6 @@ void AMyEnemyAIController::RunAI()
 	}
 }
 
-
 void AMyEnemyAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {	
 	if (GetLocalRole() != ROLE_Authority) return;
@@ -71,11 +69,14 @@ void AMyEnemyAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		if (APawn* pawn = Cast<APawn>(Actor))
 		{
 			if (pawn->IsPlayerControlled())
-				Blackboard->SetValueAsObject("AttackTarget", pawn);
+				Blackboard->SetValueAsObject("ChaseTarget", pawn);
 		}
 		break;
 	case false:
-		if (Actor == Blackboard->GetValueAsObject("AttackTarget"))
+		if (Actor == Blackboard->GetValueAsObject("ChaseTarget"))
+			Blackboard->ClearValue("ChaseTarget");
+		
+		else if (Actor == Blackboard->GetValueAsObject("AttackTarget"))
 			Blackboard->ClearValue("AttackTarget");
 		break;
 	}

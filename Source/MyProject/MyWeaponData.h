@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "MyItemData.h"
+#include "MyBullet.h"
 #include "Curves/CurveVector.h"
 #include "MyWeaponData.generated.h"
 /**
@@ -53,29 +54,56 @@ class MYPROJECT_API UMyWeaponData : public UMyItemData
 public:
 	UPROPERTY(EditAnywhere)
 	uint16 Damage;
+
 	UPROPERTY(EditAnywhere)
 	float FireRate;
+
 	UPROPERTY(EditAnywhere)
 	float ReloadTime;
+
 	UPROPERTY(EditAnywhere)
-	float Spread; // 흔들림
+	float Spread;
+
 	UPROPERTY(EditAnywhere)
 	bool bAuto;
+
 	UPROPERTY(EditAnywhere)
 	uint16 BulletCount;
+
 	UPROPERTY(EditAnywhere)
 	uint16 SwitchingBulletCount;
 
-	
 	UPROPERTY(EditAnywhere)
-	UParticleSystem* FireTracerFX;
+	UParticleSystem* FireTracerFX;   // 투사체 Trail로 사용 (날아가는 느낌)
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ImpactFX;       // 추가(없으면 nullptr 가능)
+
+	UPROPERTY(EditAnywhere)
+	float HeadshotMultiplier = 2.0f; // 추가
+
+	UPROPERTY(EditAnywhere)
+	FName HeadBoneName = TEXT("head"); // 추가 (스켈레톤에 맞게)
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UDamageType> BodyDamageType; // 수정/추가
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UDamageType> HeadDamageType; // 추가
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AMyBullet> BulletClass; // 추가(없으면 기본 AMyBullet)
+
 	UPROPERTY(EditAnywhere)
 	EWeaponType WeaponType;
+
 	UPROPERTY(EditAnywhere)
 	FWeaponIKData IK;
+
 	UPROPERTY(EditAnywhere)
 	UAnimSequence* FireAnim;
+
 	UPROPERTY(EditAnywhere)
 	UAnimSequence* ReloadAnim;
-
 };
+

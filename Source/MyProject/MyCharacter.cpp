@@ -27,17 +27,37 @@ AMyCharacter::AMyCharacter()
 
 void AMyCharacter::StartFire()
 {
+	if (!IsLocallyControlled()) return;
 	if (!EquipWeapon) return;
-	EquipWeapon->StartFire();
+
+	// (선택) 로컬 코스메틱만 즉시 재생: 반응성 좋음
+	// EquipWeapon->PlayLocalFireAnimOrFX();
+
+	ServerStartFire();
 }
 
 void AMyCharacter::StopFire()
 {
+	if (!IsLocallyControlled()) return;
+	ServerStopFire();
+}
+
+void AMyCharacter::ServerStartFire_Implementation()
+{
 	if (!EquipWeapon) return;
-	EquipWeapon->StopFire();
+
+	// 서버에서만 실제 발사/타이머 시작
+	EquipWeapon->StartFire_Server();
+}
+
+void AMyCharacter::ServerStopFire_Implementation()
+{
+	if (!EquipWeapon) return;
+	EquipWeapon->StopFire_Server();
 }
 
 // Called when the game starts or when spawned
+
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();

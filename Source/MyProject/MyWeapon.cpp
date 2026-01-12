@@ -1,176 +1,275 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
+// MyWeapon.cpp
 #include "MyWeapon.h"
 
-#include "MeshPaintVisualize.h"
 #include "MyCharacter.h"
-#include "Animation/AnimSingleNodeInstance.h"
-#include "Camera/PlayerCameraManager.h"
-#include "Kismet/GameplayStatics.h"
-#include "Particles/ParticleSystemComponent.h"
+#include "MyWeaponData.h"
+#include "MyBullet.h"
 
-// Sets default values
+#include "Net/UnrealNetwork.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Components/SphereComponent.h"
+#include "GameFramework/Pawn.h"
+#include "GameFramework/Controller.h"
+#include "Animation/AnimationAsset.h"
+
 AMyWeapon::AMyWeapon()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
+
 	bReplicates = true;
-	SetReplicateMovement(true);
-	Root = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	SetReplicateMovement(false);
+
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
+
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	Mesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	Mesh->SetupAttachment(Root);
 	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	BulletClass = AMyBullet::StaticClass();
 
 	SphereColl = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
+	SphereColl->SetupAttachment(Root);
 	SphereColl->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereColl->SetGenerateOverlapEvents(true);
 	SphereColl->SetCollisionResponseToAllChannels(ECR_Ignore);
 	SphereColl->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-	WeaponComponent = CreateDefaultSubobject<UMyWeaponComponent>(TEXT("WeaponComponent"));
 
-	Mesh->SetupAttachment(Root);
-	SphereColl->SetupAttachment(Root);
 	SphereColl->OnComponentBeginOverlap.AddDynamic(this, &AMyWeapon::OnPickUpSphereBeginOverlap);
 }
 
 void AMyWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	Mesh->SetSkeletalMesh(WeaponData->Mesh);
-	BulletCount = WeaponData->BulletCount;
+
+	if (WeaponData && Mesh)
+	{
+		Mesh->SetSkeletalMesh(WeaponData->Mesh);
+	}
+
+	if (HasAuthority() && WeaponData)
+	{
+		BulletCount = WeaponData->BulletCount;
+		ReserveAmmo = WeaponData->SwitchingBulletCount;
+	}
+}
+
+void AMyWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AMyWeapon, BulletCount);
+	DOREPLIFETIME(AMyWeapon, ReserveAmmo);
 }
 
 void AMyWeapon::OnPickUpSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                           UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-                                           const FHitResult& SweepResult)
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//USphereComponent* PickupComp = Cast<USphereComponent>(OverlappedComponent);
+	if (!HasAuthority())
+		return;
 
-	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(OtherActor))
+	AMyCharacter* MyCharacter = Cast<AMyCharacter>(OtherActor);
+	if (!MyCharacter)
+		return;
+
+	if (SphereColl)
 	{
-		//TODO : 나중에 무기 교체 할떄 현재 가지고 있는 무기 없애야함
-		//if (MyCharacter->GetEquipWeapon())
-		//	MyCharacter->SetEquipWeapon(nullptr);
+		SphereColl->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		SphereColl->SetGenerateOverlapEvents(false);
+	}
 
+	FAttachmentTransformRules Rules(EAttachmentRule::SnapToTarget, true);
+	AttachToComponent(MyCharacter->GetSocket1P(), Rules, TEXT("1P_Equipped"));
 
-		Mesh->SetSimulatePhysics(false);
-		Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		FAttachmentTransformRules rules(EAttachmentRule::SnapToTarget, true);
-		Mesh->AttachToComponent(MyCharacter->GetSocket1P(), rules, TEXT("1P_Equipped"));
-		MyCharacter->SetEquipWeapon(this);
-		SetOwner(MyCharacter);
-		//FlushNetDormancy();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, OtherActor->GetName());
-		GetWorld()->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateWeakLambda(
-				OverlappedComponent, [WeakComp = TWeakObjectPtr<UPrimitiveComponent>(OverlappedComponent)]()
-				{
-					WeakComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-				})
+	SetOwner(MyCharacter);
+	MyCharacter->SetEquipWeapon(this);
+}
+
+// =============================
+// Server-only (캐릭터 Server RPC에서 호출)
+// =============================
+
+void AMyWeapon::StartFire_Server()
+{
+	if (!HasAuthority())
+		return;
+
+	if (!WeaponData)
+		return;
+
+	HandleFire_Server();
+
+	if (WeaponData->bAuto)
+	{
+		GetWorldTimerManager().SetTimer(
+			AutoFireTimer,
+			this,
+			&AMyWeapon::HandleFire_Server,
+			WeaponData->FireRate,
+			true
 		);
 	}
 }
 
-void AMyWeapon::Fire_Implementation()
+void AMyWeapon::StopFire_Server()
 {
-	if (!Mesh || !WeaponData->FireAnim) return;
-	Mesh->PlayAnimation(WeaponData->FireAnim, false);
-	Mesh->GetSingleNodeInstance()->SetPosition(0.f, true);
-	//BulletCount--;
-	APawn* OwnerPawn = Cast<APawn>(GetOwner());
-	if (!OwnerPawn || !OwnerPawn->GetController())
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OwnerPawn or OwnerPawn->GetController() is null"));
+	if (!HasAuthority())
 		return;
-	}
 
-
-	// 1) 카메라의 정면 방향
-	FVector CamLoc;
-	FRotator CamRot;
-	OwnerPawn->GetController()->GetPlayerViewPoint(CamLoc, CamRot);
-
-	const FVector CamForward = CamRot.Vector(); // 화면 중앙(전면)
-
-	// 2) 머즐에서 그 방향으로 직진
-	const FVector StartWS = Mesh->GetSocketLocation(MuzzleName) + CamForward * 80.f;
-	const FVector EndWS = StartWS + CamForward * 15000.f; // 직선
-	const FRotator ShotRot = (EndWS - StartWS).Rotation(); // 발사 방향 회전
-	FActorSpawnParameters SP;
-	SP.Owner = OwnerPawn;
-	SP.Instigator = nullptr;
-	//TODO: 나중에 몬스터로 변경
-
-	MulticastTracer(StartWS, EndWS, ShotRot);
-
-	//AMyBullet* Bullet = GetWorld()->SpawnActor<AMyBullet>(BulletClass, StartWS, ShotRot, SP);
-	//// 3) 코스메틱 트레이서
-	//if (!Bullet)
-	//{
-	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bullet is null"));
-	//	return;
-	//}
-	//Bullet->SetData(WeaponData->FireTracerFX, WeaponData->Damage);
-	//Bullet->Fire(StartWS, EndWS, ShotRot);
-}
-
-void AMyWeapon::MulticastTracer_Implementation(const FVector& start, const FVector& end, const FRotator& rotation)
-{
-
-	UParticleSystemComponent* MuzzlePSC =
-		UGameplayStatics::SpawnEmitterAttached(WeaponData->FireTracerFX, Mesh, MuzzleName, start, rotation,
-		                                       EAttachLocation::KeepWorldPosition, true, EPSCPoolMethod::None);
-	//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponData->FireTracerFX, start, rotation, true, EPSCPoolMethod::AutoRelease);
-	if (!MuzzlePSC) return;
-
-	MuzzlePSC->bOwnerNoSee = true;
-}
-
-
-//void AMyWeapon::FireTracer_Implementation(FVector Start, FVector Impact, FRotator Rotation)
-//{
-//	UParticleSystemComponent* MuzzlePSC =
-//		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponData->FireTracerFX, Start, Rotation, true, EPSCPoolMethod::AutoRelease);
-//	
-//	if (!MuzzlePSC) return;
-//	
-//	MuzzlePSC->SetBeamSourcePoint(0, Start, 0);
-//	MuzzlePSC->SetBeamTargetPoint(0, Start, 0);
-//}
-
-
-void AMyWeapon::StartFire()
-{
-	if (BulletCount <= 0)
-	{
-		StopFire();
-		return;
-	}
-
-	switch (WeaponData->bAuto)
-	{
-	case true:
-		GetWorldTimerManager().SetTimer(AutoFireTimer, this, &AMyWeapon::Fire, WeaponData->FireRate, true);
-		break;
-	}
-	//Fire();
-}
-
-void AMyWeapon::StopFire()
-{
 	GetWorldTimerManager().ClearTimer(AutoFireTimer);
 }
 
-
-void AMyWeapon::Reload()
+void AMyWeapon::HandleFire_Server()
 {
-	Mesh->PlayAnimation(WeaponData->ReloadAnim, false);
+	if (!HasAuthority())
+		return;
 
-	if (SwitchingBulletCount - (WeaponData->BulletCount - BulletCount) < 0)
+	if (!WeaponData)
+		return;
+
+	if (!Mesh)
+		return;
+
+	if (BulletCount <= 0)
 	{
-		SwitchingBulletCount -= (WeaponData->BulletCount - BulletCount);
-		BulletCount = WeaponData->BulletCount;
+		GetWorldTimerManager().ClearTimer(AutoFireTimer);
+		return;
 	}
+
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if (!OwnerPawn)
+		return;
+
+	AController* Controller = OwnerPawn->GetController();
+	if (!Controller)
+		return;
+
+	FVector AimPoint;
+	if (!BuildAimPoint_Server(AimPoint))
+		return;
+
+	const FVector MuzzleLoc = Mesh->GetSocketLocation(MuzzleName);
+
+	FVector ShotDir = AimPoint - MuzzleLoc;
+	if (ShotDir.IsNearlyZero())
+	{
+		ShotDir = OwnerPawn->GetActorForwardVector();
+	}
+	ShotDir = ShotDir.GetSafeNormal();
+
+	TSubclassOf<AMyBullet> SpawnClass = AMyBullet::StaticClass();;
+
+	if (WeaponData->BulletClass)
+	{
+		SpawnClass = WeaponData->BulletClass;
+	}
+	else
+	{
+		SpawnClass = AMyBullet::StaticClass();
+	}
+
+	FActorSpawnParameters SP;
+	SP.Owner = OwnerPawn;
+	SP.Instigator = OwnerPawn;
+
+	AMyBullet* Bullet = GetWorld()->SpawnActor<AMyBullet>(SpawnClass, MuzzleLoc, ShotDir.Rotation(), SP);
+	if (Bullet)
+	{
+		// Bullet에서 데미지/헤드샷/FX(트레일/임팩트) 처리
+		Bullet->InitBullet(
+			WeaponData->Damage,
+			WeaponData->HeadBoneName,
+			WeaponData->BodyDamageType,
+			WeaponData->HeadDamageType,
+			WeaponData->FireTracerFX,  // TrailFX로 사용
+			WeaponData->ImpactFX,
+			ShotDir
+		);
+	}
+
+	BulletCount--;
+
+	if (WeaponData->FireAnim)
+	{
+		MulticastPlayWeaponAnim(WeaponData->FireAnim);
+	}
+}
+
+
+void AMyWeapon::Reload_Server()
+{
+	if (!HasAuthority())
+		return;
+
+	if (!WeaponData)
+		return;
+
+	const int32 MaxMag = WeaponData->BulletCount;
+	const int32 Need = MaxMag - BulletCount;
+
+	if (Need <= 0)
+		return;
+
+	const int32 Load = FMath::Min(Need, ReserveAmmo);
+
+	if (Load <= 0)
+		return;
+
+	BulletCount += Load;
+	ReserveAmmo -= Load;
+
+	MulticastPlayWeaponAnim(WeaponData->ReloadAnim);
+}
+
+// =============================
+// Cosmetics
+// =============================
+
+void AMyWeapon::MulticastPlayWeaponAnim_Implementation(UAnimationAsset* Anim)
+{
+	if (!Mesh)
+		return;
+
+	if (!Anim)
+		return;
+
+	Mesh->PlayAnimation(Anim, false);
+}
+
+// =============================
+// Helpers
+// =============================
+
+bool AMyWeapon::BuildAimPoint_Server(FVector& OutAimPoint) const
+{
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if (!OwnerPawn)
+		return false;
+
+	AController* Controller = OwnerPawn->GetController();
+	if (!Controller)
+		return false;
+
+	const FVector ViewLoc = OwnerPawn->GetPawnViewLocation();
+	const FRotator ViewRot = OwnerPawn->GetBaseAimRotation();
+	const FVector ViewDir = ViewRot.Vector();
+
+	const FVector CamStart = ViewLoc;
+	const FVector CamEnd = CamStart + ViewDir * Range;
+
+	FCollisionQueryParams Params(SCENE_QUERY_STAT(WeaponCamTrace), true);
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(OwnerPawn);
+
+	FHitResult CamHit;
+	const bool bCamHit = GetWorld()->LineTraceSingleByChannel(CamHit, CamStart, CamEnd, ECC_Visibility, Params);
+
+	if (bCamHit)
+	{
+		OutAimPoint = CamHit.ImpactPoint;
+	}
+	else
+	{
+		OutAimPoint = CamEnd;
+	}
+
+	return true;
 }
