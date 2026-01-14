@@ -1,10 +1,8 @@
 // MyWeapon.cpp
 #include "MyWeapon.h"
-
 #include "MyCharacter.h"
 #include "MyWeaponData.h"
 #include "MyBullet.h"
-
 #include "Net/UnrealNetwork.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
@@ -28,7 +26,7 @@ AMyWeapon::AMyWeapon()
 
 	SphereColl = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
 	SphereColl->SetupAttachment(Root);
-	SphereColl->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	SphereColl->SetCollisionEnabled(ECollisionEnabled::QueryOnly); 
 	SphereColl->SetGenerateOverlapEvents(true);
 	SphereColl->SetCollisionResponseToAllChannels(ECR_Ignore);
 	SphereColl->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
@@ -155,7 +153,7 @@ void AMyWeapon::HandleFire_Server()
 	}
 	ShotDir = ShotDir.GetSafeNormal();
 
-	TSubclassOf<AMyBullet> SpawnClass = AMyBullet::StaticClass();;
+	TSubclassOf<AMyBullet> SpawnClass = AMyBullet::StaticClass();
 
 	if (WeaponData->BulletClass)
 	{

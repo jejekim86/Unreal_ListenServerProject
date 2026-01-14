@@ -1,5 +1,4 @@
 #include "MyBullet.h"
-
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -127,9 +126,7 @@ void AMyBullet::ApplyHitDamage(const FHitResult& Hit, const FVector& ShotDir)
 		if (HeadBoneName != NAME_None)
 		{
 			if (Hit.BoneName == HeadBoneName)
-			{
 				bHeadshot = true;
-			}
 		}
 	}
 
@@ -144,16 +141,12 @@ void AMyBullet::ApplyHitDamage(const FHitResult& Hit, const FVector& ShotDir)
 	if (bHeadshot)
 	{
 		if (HeadDamageType)
-		{
 			DT = HeadDamageType;
-		}
 	}
 	else
 	{
 		if (BodyDamageType)
-		{
 			DT = BodyDamageType;
-		}
 	}
 
 	UGameplayStatics::ApplyPointDamage(
